@@ -19,7 +19,7 @@ use frontend\models\ContactForm;
 class SiteController extends Controller
 {
     /**
-     * {@inheritdoc}
+     * {@inheritdoc} sdf
      */
     public function behaviors()
     {

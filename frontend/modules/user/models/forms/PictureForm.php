@@ -2,7 +2,6 @@
 
 namespace frontend\modules\user\models\forms;
 
-use Yii;
 use yii\base\Model;
 
 class PictureForm extends Model
@@ -17,10 +16,5 @@ class PictureForm extends Model
               'checkExtensionByMimeType' => true,
           ],
         ];
-    }
-
-    public function save()
-    {
-        return 1;
     }
 }

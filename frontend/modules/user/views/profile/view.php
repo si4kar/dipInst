@@ -13,59 +13,68 @@ use dosamigos\fileupload\FileUpload;
 <h3><?php echo Html::encode($user->username); ?></h3>
 <p><?php echo HTMLPurifier::process($user->about); ?> page!</p>
 
-<img src="<?php echo $user->getPicture(); ?>" alt="user logo">
+<img src="<?php echo $user->getPicture(); ?>" id="profile-picture" alt="user logo">
 
-<?= FileUpload::widget([
-    'model' => $modelPicture,
-    'attribute' => 'picture',
-    'url' => ['/user/profile/upload-picture'], // your url, this is just for demo purposes,
-    'options' => ['accept' => 'image/*'],
-    'clientOptions' => [
-        'maxFileSize' => 2000000
-    ],
-    // Also, you can specify jQuery-File-Upload events
-    // see: https://github.com/blueimp/jQuery-File-Upload/wiki/Options#processing-callback-options
-    'clientEvents' => [
-        'fileuploaddone' => 'function(e, data) {
-                                console.log(e);
-                                console.log(data);
-                            }',
-        'fileuploadfail' => 'function(e, data) {
-                                console.log(e);
-                                console.log(data);
-                            }',
-    ],
-]); ?>
-
-<?php if ($currentUser && !$user->equals($currentUser)): ?>
-    <hr>
-    <?php if (!$currentUser->isFollowing($user)): ?>
-        <a href="<?php echo Url::to(['/user/profile/subscribe', 'id' => $user->getId()]); ?>" class="btn btn-info">Subscribe</a>
-    <?php else: ?>
-        <a href="<?php echo Url::to(['/user/profile/unsubscribe', 'id' => $user->getId()]); ?>" class="btn btn-info">Unsubscribe</a>
-    <?php endif; ?>
+<?php if ($currentUser->equals($user)): ?>
 
 
-    <?php if($muturalSubscriptions = $currentUser->getMuturalSubscriptionsTo($user)): ?>
+
+    <div class="alert alert-success" style="display: none" id="profile-image-success">Profile image updated</div>
+    <div class="alert alert-danger" style="display: none" id="profile-image-fail"></div>
+
+    <!--widget to upload avatar photo-->
+
+    <?= FileUpload::widget([
+        'model' => $modelPicture,
+        'attribute' => 'picture',
+        'url' => ['/user/profile/upload-picture'], // your url, this is just for demo purposes,
+        'options' => ['accept' => 'image/*'],
+        'clientEvents' => [
+            'fileuploaddone' => 'function(e, data) {
+                if (data.result.success) {
+                    $("#profile-image-success").show();
+                    $("#profile-image-fail").hide();
+                    $("#profile-picture").attr("src", data.result.pictureUri);
+                } else {
+                    $("#profile-image-fail").html(data.result.errors.picture).show();
+                    $("#profile-image-success").hide();
+                }
+            }',
+        ],
+    ]); ?>
+
+<?php else: ?>
+    <!--Buttons for subscribe and unsubscribe-->
+    <?php if ($currentUser && !$user->equals($currentUser)): ?>
         <hr>
-        <h5>Friends, who are also following <?php echo Html::encode($user->username);?>:</h5>
-        <div class="row">
-            <?php foreach ($muturalSubscriptions as $item): ?>
-                <div class="col-md-12">
-                    <a href="<?php echo Url::to(['/user/profile/view', 'nickname' => ($item['nickname']) ? ($item['nickname']) : ($item['id'])]);?>">
-                        <?php echo Html::encode($item['username']); ?>
-                    </a>
-                </div>
-            <?php endforeach; ?>
-        </div>
+        <?php if (!$currentUser->isFollowing($user)): ?>
+            <a href="<?php echo Url::to(['/user/profile/subscribe', 'id' => $user->getId()]); ?>" class="btn btn-info">Subscribe</a>
+        <?php else: ?>
+            <a href="<?php echo Url::to(['/user/profile/unsubscribe', 'id' => $user->getId()]); ?>"
+               class="btn btn-info">Unsubscribe</a>
+        <?php endif; ?>
+
+        <!--Show people, who are following you-->
+        <?php if ($muturalSubscriptions = $currentUser->getMuturalSubscriptionsTo($user)): ?>
+            <hr>
+            <h5>Friends, who are also following <?php echo Html::encode($user->username); ?>:</h5>
+            <div class="row">
+                <?php foreach ($muturalSubscriptions as $item): ?>
+                    <div class="col-md-12">
+                        <a href="<?php echo Url::to(['/user/profile/view', 'nickname' => ($item['nickname']) ? ($item['nickname']) : ($item['id'])]); ?>">
+                            <?php echo Html::encode($item['username']); ?>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     <?php endif; ?>
+
 <?php endif; ?>
-
-
 <hr>
 
 
-<!-- Button trigger modal -->
+<!-- Button to show your subscriptions and followers -->
 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#subscriptions">
     Subscriptions: <?php echo $user->countSubscriptions(); ?>
 </button>
@@ -74,7 +83,7 @@ use dosamigos\fileupload\FileUpload;
     Followers: <?php echo $user->countFollowers(); ?>
 </button>
 
-<!-- Modal subscriptions-->
+<!-- Modal window subscriptions-->
 <div class="modal fade" id="subscriptions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -100,7 +109,7 @@ use dosamigos\fileupload\FileUpload;
     </div>
 </div>
 
-<!-- Modal followers-->
+<!-- Modal window followers-->
 <div class="modal fade" id="followers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

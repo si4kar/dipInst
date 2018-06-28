@@ -28,6 +28,21 @@ class Storage extends Component implements StorageInterface
     }
 
     /**
+     * @param string $filename
+     * @return bool
+     */
+    public function deleteFile(string $filename)
+    {
+        $file = $this->getStoragePath().$filename;
+
+        if (file_exists($file)) {
+            return unlink($file);
+        }
+        return true;
+    }
+
+
+    /**
      * Prepare path to save uploaded file
      * @param UploadedFile $file
      * @return string|null

@@ -4,18 +4,21 @@
 /* @var $user frontend\models\User */
 /* @var $currentUser frontend\models\User */
 /* @var $modelPicture frontend\modules\user\models\forms\PictureForm */
+
 use yii\helpers\Html;
 use yii\helpers\HTMLPurifier;
 use yii\helpers\Url;
 use dosamigos\fileupload\FileUpload;
 ?>
 
+
+
 <h3><?php echo Html::encode($user->username); ?></h3>
 <p><?php echo HTMLPurifier::process($user->about); ?> page!</p>
 
 <img src="<?php echo $user->getPicture(); ?>" id="profile-picture" alt="user logo">
 
-<?php if ($currentUser->equals($user)): ?>
+<?php if ($currentUser && $currentUser->equals($user)): ?>
 
 
 
@@ -42,6 +45,8 @@ use dosamigos\fileupload\FileUpload;
             }',
         ],
     ]); ?>
+
+    <a href="<?php echo Url::to(['/user/profile/delete-picture']); ?>" class="btn btn-danger">Delete picture</a>
 
 <?php else: ?>
     <!--Buttons for subscribe and unsubscribe-->

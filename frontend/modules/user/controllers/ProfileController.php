@@ -40,6 +40,7 @@ class ProfileController extends Controller
         $model = new PictureForm();
         $model->picture = UploadedFile::getInstance($model, 'picture');
 
+
         if ($model->validate()) {
             $user = Yii::$app->user->identity;
             $user->picture = Yii::$app->storage->saveUploadedFile($model->picture);
@@ -112,6 +113,22 @@ class ProfileController extends Controller
         throw new NotFoundHttpException();
     }
 
+    public function actionDeletePicture()
+    {
+        if (Yii::$app->user->isGuest){
+            return $this->redirect(['/user/default/login']);
+        }
+
+        $currentUser = Yii::$app->user->identity;
+
+        if ($currentUser->deletePicture()) {
+            Yii::$app->session->setFlash('success', 'Picture deleted');
+        } else {
+            Yii::$app->session->setFlash('danger', 'Can not delete picture');
+        }
+
+        return $this->redirect(['/user/profile/view', 'nickname' => $currentUser->getNickname()]);
+    }
 
    /* public function actionGenerate()
     {

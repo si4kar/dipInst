@@ -15,6 +15,9 @@ return [
         'user' => [
             'class' => 'frontend\modules\user\module',
         ],
+        'post' => [
+            'class' => 'frontend\modules\post\module',
+        ],
     ],
     'components' => [
         'request' => [

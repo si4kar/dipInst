@@ -50,6 +50,7 @@ return [
             'showScriptName' => false,
             'rules' => [
                 'profile/<nickname:\w+>' => 'user/profile/view',
+                'post/<id:\d+>' => 'post/default/view',
             ],
         ],
         'storage' => [

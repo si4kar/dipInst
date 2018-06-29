@@ -3,14 +3,15 @@
 /* @var $this yii\web\View */
 /* @var $user frontend\models\User */
 /* @var $currentUser frontend\models\User */
+
 /* @var $modelPicture frontend\modules\user\models\forms\PictureForm */
 
 use yii\helpers\Html;
 use yii\helpers\HTMLPurifier;
 use yii\helpers\Url;
 use dosamigos\fileupload\FileUpload;
-?>
 
+?>
 
 
 <h3><?php echo Html::encode($user->username); ?></h3>
@@ -19,7 +20,6 @@ use dosamigos\fileupload\FileUpload;
 <img src="<?php echo $user->getPicture(); ?>" id="profile-picture" alt="user logo">
 
 <?php if ($currentUser && $currentUser->equals($user)): ?>
-
 
 
     <div class="alert alert-success" style="display: none" id="profile-image-success">Profile image updated</div>
@@ -57,6 +57,7 @@ use dosamigos\fileupload\FileUpload;
         <?php else: ?>
             <a href="<?php echo Url::to(['/user/profile/unsubscribe', 'id' => $user->getId()]); ?>"
                class="btn btn-info">Unsubscribe</a>
+
         <?php endif; ?>
 
         <!--Show people, who are following you-->
@@ -93,14 +94,15 @@ use dosamigos\fileupload\FileUpload;
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title" id="myModalLabel">Subscriptions</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <?php foreach ($user->getSubscriptions() as $subscription): ?>
                         <div class="col-md=12">
-                            <a href="<?php echo Url::to(['/user/profile/view', 'nickname' => ($subscription['nickname']) ? ($subscription['nickname']) : ($subscription['id']) ]);?>">
+                            <a href="<?php echo Url::to(['/user/profile/view', 'nickname' => ($subscription['nickname']) ? ($subscription['nickname']) : ($subscription['id'])]); ?>">
                                 <?php echo Html::encode($subscription['username']); ?>
                             </a>
                         </div>
@@ -119,14 +121,15 @@ use dosamigos\fileupload\FileUpload;
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title" id="myModalLabel">Followers</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <?php foreach ($user->getFollowers() as $follower): ?>
                         <div class="col-md=12">
-                            <a href="<?php echo Url::to(['/user/profile/view', 'nickname' => ($follower['nickname']) ? ($follower['nickname']) : ($follower['id']) ]);?>">
+                            <a href="<?php echo Url::to(['/user/profile/view', 'nickname' => ($follower['nickname']) ? ($follower['nickname']) : ($follower['id'])]); ?>">
                                 <?php echo Html::encode($follower['username']); ?>
                             </a>
                         </div>

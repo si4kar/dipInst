@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use frontend\models\Post;
 use frontend\models\User;
+use Intervention\Image\ImageManager;
 
 class PostForm extends Model
 {
@@ -31,6 +32,7 @@ class PostForm extends Model
     public function __construct(User $user)
     {
         $this->user = $user;
+        $this->on(self::EVENT_AFTER_VALIDATE, [$this, 'resizePicture']);
     }
 
     public function save()
@@ -48,5 +50,33 @@ class PostForm extends Model
     private function getMaxFileSize()
     {
         return Yii::$app->params['maxFileSize'];
+    }
+
+    /**
+     * Resize image if needed
+     */
+    public function resizePicture()
+    {
+        if ($this->picture->error) {
+            return;
+        }
+
+        $width = Yii::$app->params['profilePicture']['maxWidth'];
+        $height = Yii::$app->params['profilePicture']['maxHeight'];
+
+        $manager = new ImageManager(array('driver' => 'imagick'));
+
+        $image = $manager->make($this->picture->tempName);
+
+        // 3-й аргумент - органичения - специальные настройки при изменении размера
+        $image->resize($width, $height, function ($constraint) {
+
+            // Пропорции изображений оставлять такими же
+            $constraint->aspectRatio();
+
+            // Изображения, размером меньше заданных $width, $height не будут изменены:
+            $constraint->upsize();
+
+        })->save();
     }
 }

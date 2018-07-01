@@ -4,7 +4,7 @@
 /* @var $user frontend\models\User */
 /* @var $currentUser frontend\models\User */
 
-/* @var $modelPicture frontend\modules\user\models\forms\PictureForm */
+/* @var $modelPicture frontend\modules\user\controllers\ProfileController */
 
 use yii\helpers\Html;
 use yii\helpers\HTMLPurifier;
@@ -45,8 +45,9 @@ use dosamigos\fileupload\FileUpload;
             }',
         ],
     ]); ?>
-
+    <?php if ($user->picture): ?>
     <a href="<?php echo Url::to(['/user/profile/delete-picture']); ?>" class="btn btn-danger">Delete picture</a>
+    <?php endif; ?>
 
 <?php else: ?>
     <!--Buttons for subscribe and unsubscribe-->

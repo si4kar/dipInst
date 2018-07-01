@@ -4,6 +4,7 @@ namespace frontend\modules\post\controllers;
 
 use frontend\models\Post;
 use frontend\models\User;
+use frontend\modules\post\models\forms\CommentForm;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -46,12 +47,32 @@ class DefaultController extends Controller
     public function actionView($id)
     {
         $currentUser = Yii::$app->user->identity;
+        $comment = new CommentForm();
+
+        if ($comment->load(Yii::$app->request->post()) && $comment->save()) {
+
+            Yii::$app->session->setFlash('success', 'Comment add');
+
+        }
 
         return $this->render('view', [
             'post' => $this->findPost($id),
             'currentUser' => $currentUser,
+            'comment' => $comment,
+
         ]);
     }
+
+
+
+
+    public function findCommentAuthor($id)
+    {
+        if ($username = User::findIdentity($id)) {
+            return $username->username;
+        }
+    }
+
 
     /**
      * @param $id

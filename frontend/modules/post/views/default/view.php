@@ -2,9 +2,14 @@
 
 /* @var $this yii\web\View */
 /* @var $post frontend\models\Post*/
+/* @var $comment \frontend\modules\post\models\forms\CommentForm*/
+/* @var $username frontend\models\Post*/
 
 use yii\helpers\Html;
-
+use yii\widgets\ActiveForm;
+use frontend\models\Comments;
+use yii\helpers\HTMLPurifier;
+use yii\helpers\Url;
 ?>
 
 <div class="post-default-index">
@@ -51,6 +56,46 @@ use yii\helpers\Html;
         <?php endif; ?>
 
     </div>
+
+    <hr>
+
+    <!--Show comments-->
+    <div class="col-md-12">
+
+        <h3>Comments:</h3>
+        <?php $comments = Comments::getComment($post->id); ?>
+
+        <?php foreach ($comments as $current_comment): ?>
+            <h5><?php echo HTMLPurifier::process($current_comment->description); ?></h5>
+            <p>
+                <?php echo '<b>Author: </b>' . Comments::getCommentAuthor($current_comment->user_id); ?>
+                <?php echo '<b>Date: </b>' . date('m.d.Y H:i:s', $current_comment->created_at); ?>
+            </p>
+            <a href="<?php Url::to(['/post/update', 'id' => $current_comment->id]) ?>" class="btn btn-default">Edit</a>
+
+        <?php endforeach; ?>
+
+    </div>
+
+    <hr>
+    <!--Add new comment-->
+    <?php if ($currentUser): ?>
+        <div class="col-md-12">
+            <h3>Create comment</h3>
+            <?php $form = ActiveForm::begin(); ?>
+            <?php echo $form->field($comment, 'description')->textarea()->label('Comment'); ?>
+            <?php echo $form->field($comment, 'post_id')->hiddenInput(['value' => $post->id])->label(false); ?>
+
+            <?php echo Html::submitButton('Create', ['class' => 'btn btn-primary button-sendComment']); ?>
+
+            <?php ActiveForm::end(); ?>
+
+        </div>
+
+    <?php endif; ?>
+
+
+
 
 </div>
 

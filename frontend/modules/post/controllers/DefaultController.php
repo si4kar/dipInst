@@ -2,6 +2,7 @@
 
 namespace frontend\modules\post\controllers;
 
+use frontend\models\Comments;
 use frontend\models\Post;
 use frontend\models\User;
 use frontend\modules\post\models\forms\CommentForm;
@@ -64,15 +65,33 @@ class DefaultController extends Controller
     }
 
 
-
-
-    public function findCommentAuthor($id)
+    public function actionUpdate($id)
     {
-        if ($username = User::findIdentity($id)) {
-            return $username->username;
+        if ($comment = CommentForm::findComment($id)) {
+
+            if ($comment->attributes = Yii::$app->request->post('Comments') && $comment->save()) {
+
+
+                Yii::$app->session->setFlash('success', 'Comment update');
+                return $this->redirect(['/post/default/view', 'id' => $comment->post_id]);
+
+            }
+            return $this->render('update', [
+                'comment' => $comment,
+            ]);
         }
+        throw new NotFoundHttpException();
     }
 
+
+    public function actionDelete($id)
+    {
+        if ($comment = CommentForm::findComment($id)) {
+            $comment->delete();
+            return $this->redirect(['/post/default/view', 'id' => $comment->post_id]);
+        }
+        throw new NotFoundHttpException();
+    }
 
     /**
      * @param $id

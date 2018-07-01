@@ -37,11 +37,19 @@ class Comments extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getComment($id)
+    /**
+     * @param $id
+     * @return array
+     */
+    public static function getComments($id)
     {
         return static::findAll(['post_id' => $id]);
     }
 
+    /**
+     * @param $id
+     * @return string
+     */
     public static function getCommentAuthor($id)
     {
         if($user = User::findIdentity($id)) {

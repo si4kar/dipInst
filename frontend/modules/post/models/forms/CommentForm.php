@@ -6,7 +6,6 @@ namespace frontend\modules\post\models\forms;
 use Yii;
 use yii\base\Model;
 use frontend\models\Comments;
-use frontend\models\User;
 
 class CommentForm extends Model
 {
@@ -14,6 +13,7 @@ class CommentForm extends Model
 
     public $description;
     public $post_id;
+    public $id;
 
     private $user;
 
@@ -33,7 +33,6 @@ class CommentForm extends Model
 
     public function save()
     {
-        $currentUser = Yii::$app->user->identity;
         if ($this->validate()) {
             $comment = new Comments();
             $comment->description = $this->description;
@@ -44,6 +43,14 @@ class CommentForm extends Model
             return $comment->save(false);
         }
     }
+
+    public static function findComment($id)
+    {
+        $comment = Comments::find()->where(['id' => $id])->one();
+        return $comment;
+    }
+
+
 
 
 }

@@ -63,7 +63,7 @@ use yii\helpers\Url;
     <div class="col-md-12">
 
         <h3>Comments:</h3>
-        <?php $comments = Comments::getComment($post->id); ?>
+        <?php $comments = Comments::getComments($post->id); ?>
 
         <?php foreach ($comments as $current_comment): ?>
             <h5><?php echo HTMLPurifier::process($current_comment->description); ?></h5>
@@ -71,8 +71,11 @@ use yii\helpers\Url;
                 <?php echo '<b>Author: </b>' . Comments::getCommentAuthor($current_comment->user_id); ?>
                 <?php echo '<b>Date: </b>' . date('m.d.Y H:i:s', $current_comment->created_at); ?>
             </p>
-            <a href="<?php Url::to(['/post/update', 'id' => $current_comment->id]) ?>" class="btn btn-default">Edit</a>
 
+            <?php if($currentUser && $currentUser->id == $current_comment->user_id): ?>
+                <a href="<?php echo Url::to(['/post/default/update', 'id' => $current_comment->id]); ?>" class="btn btn-default">Edit</a>
+                <a href="<?php echo Url::to(['/post/default/delete', 'id' => $current_comment->id]); ?>" class="btn btn-default">Delete</a>
+            <?php endif; ?>
         <?php endforeach; ?>
 
     </div>
@@ -85,9 +88,7 @@ use yii\helpers\Url;
             <?php $form = ActiveForm::begin(); ?>
             <?php echo $form->field($comment, 'description')->textarea()->label('Comment'); ?>
             <?php echo $form->field($comment, 'post_id')->hiddenInput(['value' => $post->id])->label(false); ?>
-
-            <?php echo Html::submitButton('Create', ['class' => 'btn btn-primary button-sendComment']); ?>
-
+            <?php echo Html::submitButton('Create', ['class' => 'btn btn-primary']); ?>
             <?php ActiveForm::end(); ?>
 
         </div>

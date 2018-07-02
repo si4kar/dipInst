@@ -11,12 +11,20 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'modules' => [
+        'user' => [
+            'class' => 'frontend\modules\user\module',
+        ],
+        'post' => [
+            'class' => 'frontend\modules\post\module',
+        ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'frontend\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],
@@ -41,8 +49,22 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'profile/<nickname:\w+>' => 'user/profile/view',
+                'post/update/<id:\d+>' => 'post/default/update',
+                'post/delete/<id:\d+>' => 'post/default/delete',
+                'post/<id:\d+>' => 'post/default/view',
             ],
         ],
+        'storage' => [
+            'class' => 'frontend\components\Storage',
+        ],
+        'feedService' => [
+            'class' => 'frontend\components\FeedService',
+        ],
+        'commentService' => [
+            'class' => 'frontend\components\CommentService',
+        ],
+
 
     ],
     'params' => $params,

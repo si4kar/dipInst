@@ -1,53 +1,81 @@
 <?php
 
 /* @var $this yii\web\View */
+/* @var $feedItems[] frontend\models\Feed */
+/* @var $currentUser frontend\models\User */
+
+use yii\web\JqueryAsset;
+use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\helpers\HTMLPurifier;
 
 $this->title = 'My Yii Application';
+
 ?>
+
 <div class="site-index">
 
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
+    <?php if ($feedItems): ?>
+        <?php foreach ($feedItems as $feedItem): ?>
+            <?php /* @var $feedItem \frontend\models\Feed */ ?>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+            <div class="col-md-12">
 
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
+                <div class="col-md-12">
+                    <img src="<?php echo $feedItem->author_picture?>"  width="30" height="30">
+                    <a href="<?php echo Url::to(['/user/profile/view', 'nickname' => ($feedItem->author_nickname) ? ($feedItem->author_nickname) : ($feedItem->author_id)]) ?>">
+                        <?php echo Html::encode($feedItem->author_name); ?>
+                    </a>
+                </div>
 
-    <div class="body-content">
+                <a href="<?php echo Url::to(['/post/default/view', 'id' => $feedItem->post_id]); ?>">"><img src="<?php echo Yii::$app->storage->getFile($feedItem->post_filename); ?>" ></a>
+                <div class="col-md-12">
+                    <?php echo HTMLPurifier::process($feedItem->post_description); ?>
+                </div>
 
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+                <div class="col-md-12">
+                    <?php echo Yii::$app->formatter->asDatetime($feedItem->post_created_at); ?>
+                </div>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                <div class="col-md-12">
+                    Likes: <span class="likes-count"><?php echo  $feedItem->countLikes(); ?></span>
+                    <?php if ($currentUser->likesPost($feedItem->post_id)): ?>
+                        <a href="#" class="btn btn-primary button-like" style="display: none" data-id="<?php echo $feedItem->post_id; ?>">
+                            Like&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span>
+                        </a>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+                        <a href="#" class="btn btn-primary button-unlike"  data-id="<?php echo $feedItem->post_id; ?>">
+                            Unlike&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
+                        </a>
+                    <?php else: ?>
+                        <a href="#" class="btn btn-primary button-like" data-id="<?php echo $feedItem->post_id; ?>">
+                            Like&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span>
+                        </a>
+
+                        <a href="#" class="btn btn-primary button-unlike" style="display: none" data-id="<?php echo $feedItem->post_id; ?>">
+                            Unlike&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
+                        </a>
+
+                    <?php endif; ?>
+                    <br>
+                    Comments: <span class="comments-count"><?php echo  $feedItem->countCommentsToPost(); ?></span>
+                </div>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+            <div class="col-md-12"><hr/></div>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+        <?php endforeach; ?>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+        <?php else: ?>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
+        <div class="col-md-12">
+            Nobody posted yet!
         </div>
 
-    </div>
+    <?php endif; ?>
+
 </div>
+
+<?php $this->registerJsFile('@web/js/likes.js', [
+    'depends' => \yii\web\JqueryAsset::className(),
+]);

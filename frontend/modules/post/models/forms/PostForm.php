@@ -7,10 +7,12 @@ use yii\base\Model;
 use frontend\models\Post;
 use frontend\models\User;
 use Intervention\Image\ImageManager;
+use frontend\models\events\PostCreatedEvent;
 
 class PostForm extends Model
 {
     const MAX_DESCRIPTION_LENGTH = 1000;
+    const EVENT_POST_CREATED = 'post_created';
 
     public $picture;
     public $description;
@@ -33,8 +35,12 @@ class PostForm extends Model
     {
         $this->user = $user;
         $this->on(self::EVENT_AFTER_VALIDATE, [$this, 'resizePicture']);
+        $this->on(self::EVENT_POST_CREATED, [Yii::$app->feedService, 'addToFeeds']);
     }
 
+    /**
+     * @return bool
+     */
     public function save()
     {
         if ($this->validate()) {
@@ -43,8 +49,16 @@ class PostForm extends Model
             $post->created_at = time();
             $post->filename = Yii::$app->storage->saveUploadedFile($this->picture);
             $post->user_id = $this->user->getId();
-            return $post->save(false);
+            if ($post->save(false)) {
+                $event = new PostCreatedEvent();
+                $event->user = $this->user;
+                $event->post = $post;
+                $this->trigger(self::EVENT_POST_CREATED, $event);
+                return true;
+            }
         }
+
+        return false;
     }
 
     private function getMaxFileSize()

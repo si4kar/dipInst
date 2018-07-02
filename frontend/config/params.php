@@ -7,7 +7,9 @@ return [
     'storageUri' => '/uploads/',
 
     'profilePicture' => [
-        'maxWidth' => 320,
-        'maxHeight' => 320,
+        'maxWidth' => 1024,
+        'maxHeight' => 768,
     ],
+
+    'feedPostLimit' => 200,
 ];

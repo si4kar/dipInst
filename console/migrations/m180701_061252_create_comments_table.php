@@ -10,7 +10,7 @@ class m180701_061252_create_comments_table extends Migration
     /**
      * {@inheritdoc}
      */
-    public function safeUp()
+    public function up()
     {
         $this->createTable('comments', [
             'id' => $this->primaryKey(),
@@ -24,7 +24,7 @@ class m180701_061252_create_comments_table extends Migration
     /**
      * {@inheritdoc}
      */
-    public function safeDown()
+    public function down()
     {
         $this->dropTable('comments');
     }

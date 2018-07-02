@@ -102,4 +102,15 @@ class Post extends \yii\db\ActiveRecord
         $redis = Yii::$app->redis;
         return $redis->sismember("post:{$this->getId()}:likes", $user->getId());
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public static function getPosts($id)
+    {
+        $order = ['created_at' => SORT_DESC];
+        return static::find()->where(['user_id' => $id])->orderBy($order)->all();
+
+    }
 }

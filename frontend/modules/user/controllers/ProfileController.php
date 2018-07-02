@@ -2,6 +2,7 @@
 
 namespace frontend\modules\user\controllers;
 
+use frontend\models\Post;
 use Yii;
 use yii\web\Controller;
 use frontend\models\User;
@@ -22,11 +23,18 @@ class ProfileController extends Controller
         $currentUser = Yii::$app->user->identity;
 
         $modelPicture = new PictureForm();
+        $request = Yii::$app->request;
+        $id = $request->get('nickname');
+
+        /* $limit = Yii::$app->params['feedPostLimit'];*/
+        $postItems = Post::getPosts($id);
+
 
         return $this->render('view', [
             'user' => $this->findUser($nickname),
             'currentUser' => $currentUser,
             'modelPicture' => $modelPicture,
+            'postItems' => $postItems,
         ]);
     }
 

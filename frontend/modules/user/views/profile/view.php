@@ -3,7 +3,7 @@
 /* @var $this yii\web\View */
 /* @var $user frontend\models\User */
 /* @var $currentUser frontend\models\User */
-
+/* @var $postItems[] frontend\models\Feed */
 /* @var $modelPicture frontend\modules\user\controllers\ProfileController */
 
 use yii\helpers\Html;
@@ -142,5 +142,35 @@ use dosamigos\fileupload\FileUpload;
             </div>
         </div>
     </div>
+</div>
+<hr>
+<!--List of feeds-->
+<div class="col-md-12">
+    <?php if ($postItems): ?>
+        <h3>Posts: </h3>
+        <?php foreach ($postItems as $postItem): ?>
+            <?php /* @var $feedItem \frontend\models\Feed */ ?>
+
+            <div class="col-md-12">
+
+
+                <a href="<?php echo Url::to(['/post/default/view', 'id' => $postItem->id]); ?>">"><img src="<?php echo Yii::$app->storage->getFile($postItem->filename); ?>" ></a>
+                <div class="col-md-12">
+                    <?php echo HTMLPurifier::process($postItem->description); ?>
+                </div>
+
+                <div class="col-md-12">
+                    <?php echo Yii::$app->formatter->asDatetime($postItem->created_at); ?>
+                </div>
+
+
+            </div>
+
+            <div class="col-md-12"><hr/></div>
+
+        <?php endforeach; ?>
+
+    <?php endif; ?>
+
 </div>
 

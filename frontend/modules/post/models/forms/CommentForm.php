@@ -80,8 +80,7 @@ class CommentForm extends Model
      */
     public function findComment($id)
     {
-        $comment = Comments::find()->where(['id' => $id])->one();
-        return $comment;
+        return Comments::find()->where(['id' => $id])->one();
     }
 
 

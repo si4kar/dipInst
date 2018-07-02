@@ -69,23 +69,32 @@ class DefaultController extends Controller
         ]);
     }
 
-
+    /**
+     * Update current comment
+     * @param $id
+     * @return string
+     */
     public function actionUpdate($id)
     {
-        if ($comment = CommentForm::findComment($id)) {
+        $comment = new CommentForm();
 
-            if ($comment->attributes = Yii::$app->request->post('Comments') && $comment->save()) {
+        if ($commentOld = $comment->findComment($id)) {
+            if (Yii::$app->request->post('Comments')) {
+                $arr = Yii::$app->request->post('Comments');
+                $commentOld->description = $arr['description'];
 
-
-                Yii::$app->session->setFlash('success', 'Comment update');
-                return $this->redirect(['/post/default/view', 'id' => $comment->post_id]);
-
+                if($commentOld->save()) {
+                    Yii::$app->session->setFlash('success', 'Comment update');
+                    return $this->redirect(['/post/default/view', 'id' => $commentOld->post_id]);
+                }
             }
-            return $this->render('update', [
-                'comment' => $comment,
-            ]);
+
         }
-        throw new NotFoundHttpException();
+        return $this->render('update', [
+            'commentOld' => $commentOld,
+        ]);
+
+
     }
 
     /**

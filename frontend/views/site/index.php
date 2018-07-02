@@ -57,6 +57,8 @@ $this->title = 'My Yii Application';
                         </a>
 
                     <?php endif; ?>
+                    <br>
+                    Comments: <span class="comments-count"><?php echo  $feedItem->countCommentsToPost(); ?></span>
                 </div>
             </div>
 

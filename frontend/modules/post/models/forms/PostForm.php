@@ -61,6 +61,9 @@ class PostForm extends Model
         return false;
     }
 
+
+
+
     private function getMaxFileSize()
     {
         return Yii::$app->params['maxFileSize'];

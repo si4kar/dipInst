@@ -88,12 +88,17 @@ class DefaultController extends Controller
         throw new NotFoundHttpException();
     }
 
-
+    /**
+     * @param $id
+     * @return Response
+     * @throws NotFoundHttpException
+     */
     public function actionDelete($id)
     {
-        if ($comment = CommentForm::findComment($id)) {
-            $comment->delete();
-            return $this->redirect(['/post/default/view', 'id' => $comment->post_id]);
+        $comment = new CommentForm();
+        if ($post_id = $comment->deleteFromRedis($id)) {
+
+            return $this->redirect(['/post/default/view', 'id' => $post_id]);
         }
         throw new NotFoundHttpException();
     }

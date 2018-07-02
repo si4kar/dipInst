@@ -61,6 +61,9 @@ return [
         'feedService' => [
             'class' => 'frontend\components\FeedService',
         ],
+        'commentService' => [
+            'class' => 'frontend\components\CommentService',
+        ],
 
 
     ],

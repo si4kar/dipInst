@@ -28,7 +28,7 @@ $this->title = 'My Yii Application';
                     </a>
                 </div>
 
-                <a href="<?php echo Url::to(['/post/default/view', 'id' => $feedItem->post_id]); ?>">"><img src="<?php echo Yii::$app->storage->getFile($feedItem->post_filename); ?>" ></a>
+                <a href="<?php echo Url::to(['/post/default/view', 'id' => $feedItem->post_id]); ?>"><img src="<?php echo Yii::$app->storage->getFile($feedItem->post_filename); ?>" ></a>
                 <div class="col-md-12">
                     <?php echo HTMLPurifier::process($feedItem->post_description); ?>
                 </div>

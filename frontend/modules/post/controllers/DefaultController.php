@@ -56,7 +56,6 @@ class DefaultController extends Controller
         $comment = new CommentForm();
 
         if ($comment->load(Yii::$app->request->post()) && $comment->save()) {
-
             Yii::$app->session->setFlash('success', 'Comment add');
 
         }

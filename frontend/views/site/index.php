@@ -9,6 +9,7 @@ use yii\web\JqueryAsset;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\HTMLPurifier;
+use yii\widgets\LinkPager;
 
 $this->title = 'News feed';
 
@@ -78,6 +79,9 @@ $this->title = 'News feed';
                                     </div>
                                 </article>
                             <?php endforeach; ?>
+
+                            <!--display pagination-->
+                            <?php echo LinkPager::widget(['pagination' => $pages,]); ?>
 
                         <?php else: ?>
 

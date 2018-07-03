@@ -327,6 +327,7 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(Feed::className(), ['user_id' => 'id'])->orderBy($order)->limit($limit)->all();
     }
 
+
     public function likesPost(int $postId)
     {
         /* @var $redis Connection */

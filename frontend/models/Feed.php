@@ -67,4 +67,5 @@ class Feed extends \yii\db\ActiveRecord
         return $redis->scard("post:{$this->post_id}:comments");
     }
 
+
 }

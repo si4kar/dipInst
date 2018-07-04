@@ -321,10 +321,10 @@ class User extends ActiveRecord implements IdentityInterface
      * @param int $limit
      * @return array|ActiveRecord[]
      */
-    public function getFeed(int $limit)
+    public function getFeed()
     {
         $order = ['post_created_at' => SORT_DESC];
-        return $this->hasMany(Feed::className(), ['user_id' => 'id'])->orderBy($order)->limit($limit)->all();
+        return $this->hasMany(Feed::className(), ['user_id' => 'id'])->orderBy($order);
     }
 
 

@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use frontend\models\User;
 use yii\data\Pagination;
+use yii\web\Response;
 
 
 /**
@@ -39,13 +40,9 @@ class SiteController extends Controller
         /* @var $currentUser User */
         $currentUser = Yii::$app->user->identity;
 
-        $limit = Yii::$app->params['feedPostLimit'];
-
-        /*$feedItems = $currentUser->getFeed($limit);*/
-        $posts = Feed::find()->where(['user_id' => $currentUser->getId()])->orderBy(['post_created_at' => SORT_DESC]);
-        $pages = new Pagination(['totalCount' => $posts->count(), 'pageSize' => 5]);
-        $feedItems = $posts->offset($pages->offset)->limit($pages->limit)->all();
-
+        $feedItems = $currentUser->getFeed();
+        $pages = new Pagination(['totalCount' => $feedItems->count(), 'pageSize' => 5]);
+        $feedItems = $feedItems->offset($pages->offset)->limit($pages->limit)->all();
 
         return $this->render('index', [
             'feedItems' => $feedItems,
@@ -53,6 +50,25 @@ class SiteController extends Controller
             'pages' => $pages,
         ]);
     }
+
+    public function actionSearch($term)
+    {
+        $currentUser = Yii::$app->user->identity;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $rs = Feed::find()->andWhere(['like', 'post_description', 'da'])->andWhere(['user_id' => $currentUser->getId()])->all();
+
+        if ($rs != null) {
+            $row_set = [];
+            foreach ($rs as $row) {
+                $row_set[] = $row->post_description; //build an array
+            }
+            return $row_set;
+        }
+
+        return false;
+
+    }
+
 
 
 }

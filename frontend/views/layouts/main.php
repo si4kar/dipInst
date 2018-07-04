@@ -11,6 +11,7 @@ use frontend\assets\AppAsset;
 use frontend\assets\FontAwesomeAsset;
 use common\widgets\Alert;
 use yii\helpers\Url;
+use yii\jui\AutoComplete;
 
 AppAsset::register($this);
 FontAwesomeAsset::register($this);
@@ -48,7 +49,19 @@ FontAwesomeAsset::register($this);
                 <div class="col-md-4 col-sm-4 navicons-topbar">
                     <ul>
                         <li class="blog-search">
-                            <a href="#" title="Search"><i class="fa fa-search"></i></a>
+                            <i class="fa fa-search"></i>
+
+                                <?php echo AutoComplete::widget([
+                                    /*          'model' => $model,
+                                              'attribute' => 'country',*/
+                                    'options' => (['class' => 'form-control', 'placeholder' => 'Search for description']),
+                                    'clientOptions' => [
+                                        'source' => Url::to(['site/search']),
+                                        'minLength'=>'2',
+
+                                    ],
+                                ]); ?>
+
                         </li>
                     </ul>
                 </div>

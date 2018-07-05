@@ -2,7 +2,7 @@
 
 /* @var $this yii\web\View */
 /* @var $post frontend\models\Post*/
-/* @var $comment \frontend\modules\post\models\forms\CommentForm*/
+/* @var $comment \frontend\modules\post\models\forms\Manage*/
 /* @var $username frontend\models\Post*/
 
 use yii\helpers\Html;

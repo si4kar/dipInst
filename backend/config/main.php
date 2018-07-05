@@ -42,6 +42,10 @@ return [
             'errorAction' => 'site/error',
         ],
 
+        'postService' => [
+            'class' => 'backend\components\PostService',
+        ],
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,

@@ -2,7 +2,6 @@
 
 namespace frontend\modules\post\controllers;
 
-use frontend\models\Comments;
 use frontend\models\Post;
 use frontend\models\User;
 use frontend\modules\post\models\forms\CommentForm;

@@ -2,12 +2,14 @@
 
 namespace backend\modules\complaints\controllers;
 
+use backend\modules\compaints\models\ManagePost;
 use Yii;
 use backend\models\Post;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use backend\modules\complaints\models\Manage;
 
 /**
  * ManageController implements the CRUD actions for Post model.
@@ -52,7 +54,7 @@ class ManageController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
+              return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -66,9 +68,18 @@ class ManageController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+      /*  $post_id = $this->findModel($id);
 
-        return $this->redirect(['index']);
+
+        return $this->redirect(['index']);*/
+
+        $post = new Manage();
+        if ($post_id = $post->findModel($id)) {
+            $post->deletePost($post_id->id);
+            return $this->redirect(['index']);
+        }
+        throw new NotFoundHttpException();
+
     }
 
     /**
@@ -85,13 +96,6 @@ class ManageController extends Controller
         }
     }
 
-    /**
-     * Finds the Post model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Post the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Post::findOne($id)) !== null) {
@@ -100,4 +104,7 @@ class ManageController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+
 }

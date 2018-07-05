@@ -58,4 +58,5 @@ class Post extends \yii\db\ActiveRecord
         $this->complaints = 0;
         return $this->save(false, ['complaints']);
     }
+
 }

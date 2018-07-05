@@ -54,8 +54,9 @@ class ManageController extends Controller
      */
     public function actionView($id)
     {
-              return $this->render('view', [
-            'model' => $this->findModel($id),
+        $model = new Manage();
+        return $this->render('view', [
+            'model' => $model->findModel($id),
         ]);
     }
 
@@ -95,16 +96,5 @@ class ManageController extends Controller
             return $this->redirect(['index']);
         }
     }
-
-    protected function findModel($id)
-    {
-        if (($model = Post::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-
 
 }

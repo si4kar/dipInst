@@ -31,6 +31,8 @@ use yii\helpers\Url;
 
     <div class="col-md-12">
         Likes: <span class="likes-count"><?php echo $post->countLikes(); ?></span>
+
+        <?php if ($currentUser->getId() != $post->user_id): ?>
         <a href="#" class="btn btn-default button-like <?php echo ($currentUser->likesPost($post->id)) ? "display-none" : ""; ?>"
            data-id="<?php echo $post->id; ?>">
             Like&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span>
@@ -40,6 +42,8 @@ use yii\helpers\Url;
            data-id="<?php echo $post->id ?>">
             Unlike&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
         </a>
+        <?php endif; ?>
+
     </div>
 
     <hr>

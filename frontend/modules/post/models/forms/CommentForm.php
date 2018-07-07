@@ -4,6 +4,7 @@ namespace frontend\modules\post\models\forms;
 
 
 use frontend\models\events\CommentCreatedEvent;
+use frontend\models\events\PostDeletedEvent;
 use Yii;
 use yii\base\Model;
 use frontend\models\Comments;
@@ -82,8 +83,5 @@ class CommentForm extends Model
     {
         return Comments::find()->where(['id' => $id])->one();
     }
-
-
-
 
 }

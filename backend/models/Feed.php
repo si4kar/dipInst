@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models;
+namespace backend\models;
 
 use Yii;
 
@@ -46,34 +46,4 @@ class Feed extends \yii\db\ActiveRecord
             'post_created_at' => 'Post Created At',
         ];
     }
-
-    /**
-     * @return mixed
-     */
-    public function countLikes()
-    {
-        /* @var $redis Connection */
-        $redis = Yii::$app->redis;
-        return $redis->scard("post:{$this->post_id}:likes");
-    }
-
-    /**
-     * @return mixed
-     */
-    public function countCommentsToPost()
-    {
-        /* @var $redis Connection */
-        $redis = Yii::$app->redis;
-        return $redis->scard("post:{$this->post_id}:comments");
-    }
-  /**
-     * @return mixed
-     */
-    public function isReported(User $user)
-    {
-        /* @var $redis Connection */
-        $redis = Yii::$app->redis;
-        return $redis->sismember("post:{$this->post_id}:complaints", $user->getId());
-    }
-
 }

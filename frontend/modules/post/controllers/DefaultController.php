@@ -2,7 +2,6 @@
 
 namespace frontend\modules\post\controllers;
 
-use frontend\models\Comments;
 use frontend\models\Post;
 use frontend\models\User;
 use frontend\modules\post\models\forms\CommentForm;
@@ -56,7 +55,6 @@ class DefaultController extends Controller
         $comment = new CommentForm();
 
         if ($comment->load(Yii::$app->request->post()) && $comment->save()) {
-
             Yii::$app->session->setFlash('success', 'Comment add');
 
         }
@@ -169,5 +167,33 @@ class DefaultController extends Controller
             'success' => true,
             'likesCount' => $post->countLikes(),
         ];
+    }
+
+    public function actionComplain()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/user/default/login']);
+        }
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $id = Yii::$app->request->post('id');
+
+        /* @var $currentUser User */
+        $currentUser = Yii::$app->user->identity;
+        $post = $this->findPost($id);
+
+        if ($post->complain($currentUser)) {
+            return  [
+                'success' => true,
+                'text' => 'Post reported'
+            ];
+        }
+
+        return [
+            'success' => false,
+            'text' => 'Error',
+        ];
+
     }
 }

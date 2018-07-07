@@ -11,6 +11,7 @@ use frontend\assets\AppAsset;
 use frontend\assets\FontAwesomeAsset;
 use common\widgets\Alert;
 use yii\helpers\Url;
+use yii\jui\AutoComplete;
 
 AppAsset::register($this);
 FontAwesomeAsset::register($this);
@@ -48,7 +49,27 @@ FontAwesomeAsset::register($this);
                 <div class="col-md-4 col-sm-4 navicons-topbar">
                     <ul>
                         <li class="blog-search">
-                            <a href="#" title="Search"><i class="fa fa-search"></i></a>
+                            <i class="fa fa-search"></i>
+
+                                <?php echo AutoComplete::widget([
+                                    /*          'model' => $model,
+                                              'attribute' => 'country',*/
+                                    'options' => (['class' => 'form-control', 'placeholder' => 'Search for description']),
+                                    'clientOptions' => [
+                                        'source' => Url::to(['site/search']),
+                                        'minLength'=>'2',
+
+                                    ],
+                                ]); ?>
+                        </li>
+
+                        <li>
+                            <br>
+                            <p>Language:</p>
+                            <?= Html::beginForm(['/site/language']) ?>
+                            <?= Html::dropDownList('language', Yii::$app->language, ['en-US' => 'English', 'ru-RU' => 'Русский']) ?>
+                            <?= Html::submitButton('Change') ?>
+                            <?= Html::endForm(); ?>
                         </li>
                     </ul>
                 </div>
@@ -62,19 +83,20 @@ FontAwesomeAsset::register($this);
                     <nav class="main-menu">
                         <?php
                         $menuItems = [
-                            ['label' => 'NewsFeed', 'url' => ['/site/index']],
+                            ['label' => Yii::t('menu', 'NewsFeed'), 'url' => ['/site/index']],
                         ];
                         if (Yii::$app->user->isGuest) {
-                            $menuItems[] = ['label' => 'Signup', 'url' => ['/user/default/signup']];
-                            $menuItems[] = ['label' => 'Login', 'url' => ['/user/default/login']];
+                            $menuItems[] = ['label' => Yii::t('menu','Signup'), 'url' => ['/user/default/signup']];
+                            $menuItems[] = ['label' => Yii::t('menu','Login'), 'url' => ['/user/default/login']];
                         } else {
-                            $menuItems[] = ['label' => 'My page', 'url' => ['/user/profile/view', 'nickname' => Yii::$app->user->identity->getNickname()]];
-                            $menuItems[] = ['label' => 'Create post', 'url' => ['/post/default/create']];
+                            $menuItems[] = ['label' => Yii::t('menu', 'My page'), 'url' => ['/user/profile/view', 'nickname' => Yii::$app->user->identity->getNickname()]];
+                            $menuItems[] = ['label' => Yii::t('menu', 'Create post'), 'url' => ['/post/default/create']];
                             $menuItems[] = '<li>'
                                 . Html::beginForm(['/user/default/logout'], 'post')
                                 . Html::submitButton(
-                                    'Logout (' . Yii::$app->user->identity->username . ') <i class="fa fa-sign-out"></i>',
-                                    ['class' => 'btn btn-link logout']
+                                    Yii::t('menu', 'Logout ({username})', [
+                                            'username' => Yii::$app->user->identity->username
+                                    ]).  '<i class="fa fa-sign-out"></i>', ['class' => 'btn btn-link logout']
                                 )
                                 . Html::endForm()
                                 . '</li>';

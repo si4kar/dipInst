@@ -1,6 +1,6 @@
 <?php
 
-/* @var $commentOld \frontend\modules\post\models\forms\CommentForm*/
+/* @var $commentOld \frontend\modules\post\models\forms\Manage*/
 
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;

@@ -14,7 +14,7 @@ class PictureForm extends Model
     {
         return [
           [['picture'], 'file',
-              'extensions' => ['jpg'],
+              'extensions' => ['jpg', 'png'],
               'checkExtensionByMimeType' => true,
               'maxSize' => $this->getMaxFileSize(),
           ],

@@ -12,6 +12,7 @@ use Yii;
  * @property string $filename
  * @property string $description
  * @property string $created_at
+ * @property string $complaints
  */
 class Post extends \yii\db\ActiveRecord
 {
@@ -111,6 +112,23 @@ class Post extends \yii\db\ActiveRecord
     {
         $order = ['created_at' => SORT_DESC];
         return static::find()->where(['user_id' => $id])->orderBy($order)->all();
+    }
 
+    /**
+     * Add complain to post from given user
+     * @param User $user
+     * @return bool
+     */
+    public function complain(User $user)
+    {
+        /* @var $redis \yii\redis\Connection */
+        $redis = Yii::$app->redis;
+        $key = "post:{$this->getId()}:complaints";
+
+        if (!$redis->sismember($key, $user->getId())) {
+            $redis->sadd($key, $user->getId());
+            $this->complaints++;
+            return $this->save(false, ['complaints']);
+        }
     }
 }

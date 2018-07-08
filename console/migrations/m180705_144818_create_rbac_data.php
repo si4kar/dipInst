@@ -54,6 +54,7 @@ class m180705_144818_create_rbac_data extends Migration
             'email' => 'admin@admin.com',
             'username' => 'admin',
             'password_hash' => '$2y$13$P9.d7KUb8C6BHCvkdzMsrOi5U.vIAw01UmriB.34PiN50e8nTGFge', // 111111
+            'type' => 1,
         ]);
         $user->generateAuthKey();
         $user->save();

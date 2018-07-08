@@ -7,6 +7,7 @@
 use yii\helpers\Html;
 use yii\helpers\HTMLPurifier;
 use yii\helpers\Url;
+use yii\widgets\LinkPager;
 
 $this->title = "Users list";
 ?>
@@ -39,7 +40,7 @@ $this->title = "Users list";
                                 <!--Show people, who are following you-->
                                 <?php if ($muturalSubscriptions = $currentUser->getMuturalSubscriptionsTo($user)): ?>
                                     <hr>
-                                    <h5>Friends, who are also following <?php echo Html::encode($user->username); ?>
+                                    <h5><?php echo Yii::t('menu', 'Friends, who are also following');?> <?php echo Html::encode($user->username); ?>
                                         :</h5>
                                     <div class="row">
                                         <?php foreach ($muturalSubscriptions as $item): ?>
@@ -56,16 +57,16 @@ $this->title = "Users list";
                             <hr>
                             <div class="profile-bottom">
                                 <div class="profile-post-count">
-                                    <span><?php echo $user->getPostCount(); ?> posts</span>
+                                    <span><?php echo Yii::t('menu', 'posts ') . '(' . $user->getPostCount() . ')';?></span>
                                 </div>
                                 <div class="profile-followers">
                                     <a href="#" data-toggle="modal"
-                                       data-target="#followers"> <?php echo $user->countFollowers(); ?> followers</a>
+                                       data-target="#followers"> <?php echo Yii::t('menu', 'followers ') . '(' . $user->countFollowers() . ')';?></a>
                                 </div>
                                 <div class="profile-following">
                                     <a href="#" data-toggle="modal"
-                                       data-target="#subscriptions"> <?php echo $user->countSubscriptions(); ?>
-                                        following</a>
+                                       data-target="#subscriptions">
+                                        <?php echo Yii::t('menu', 'following ') . '(' . $user->countSubscriptions(). ')';?></a>
                                 </div>
                             </div>
                         </article>
@@ -135,5 +136,9 @@ $this->title = "Users list";
     </div>
 
 <?php endforeach; ?>
+
+<!--display pagination-->
+<?php echo LinkPager::widget(['pagination' => $pages,]); ?>
+
 
 

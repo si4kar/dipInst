@@ -5,13 +5,10 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\assets\FontAwesomeAsset;
 use common\widgets\Alert;
 use yii\helpers\Url;
-use yii\jui\AutoComplete;
 
 AppAsset::register($this);
 FontAwesomeAsset::register($this);
@@ -52,8 +49,8 @@ FontAwesomeAsset::register($this);
                             <br>
                             <p>Language:</p>
                             <?= Html::beginForm(['/site/language']) ?>
-                            <?= Html::dropDownList('language', Yii::$app->language, ['en-US' => 'English', 'ru-RU' => 'Русский']) ?>
-                            <?= Html::submitButton('Change') ?>
+                            <?= Html::dropDownList('language', Yii::$app->language, ['en-US' => 'English', 'ru-RU' => 'Русский'], ['class' => 'btn btn-default dropdown-toggle']) ?>
+                            <?= Html::submitButton('Change', ['class' => 'btn btn-default']) ?>
                             <?= Html::endForm(); ?>
                         </li>
                     </ul>

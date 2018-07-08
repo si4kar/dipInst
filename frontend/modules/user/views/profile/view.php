@@ -32,24 +32,24 @@ $this->title = Html::encode($user->username);
                         <div class="profile-description">
                             <p><?php echo HTMLPurifier::process($user->about); ?></p>
                         </div>
-                            <hr>
+
                         <?php endif; ?>
 
                         <!--If show another user profile add button subscribe and unsubscribe-->
                         <?php if ($currentUser && !$user->equals($currentUser)): ?>
                             <br>
                             <?php if (!$currentUser->isFollowing($user)): ?>
-                                <a href="<?php echo Url::to(['/user/profile/subscribe', 'id' => $user->getId()]); ?>" class="btn btn-info">Subscribe</a>
+                                <a href="<?php echo Url::to(['/user/profile/subscribe', 'id' => $user->getId()]); ?>" class="btn btn-info"><?php echo Yii::t('menu', 'Subscribe') ?></a>
                             <?php else: ?>
                                 <a href="<?php echo Url::to(['/user/profile/unsubscribe', 'id' => $user->getId()]); ?>"
-                                   class="btn btn-info">Unsubscribe</a>
+                                   class="btn btn-info"><?php echo Yii::t('menu', 'Unsubscribe') ?></a>
 
                             <?php endif; ?>
 
                             <!--Show people, who are following you-->
                             <?php if ($muturalSubscriptions = $currentUser->getMuturalSubscriptionsTo($user)): ?>
                                 <hr>
-                                <h5>Friends, who are also following <?php echo Html::encode($user->username); ?>:</h5>
+                                <h5><?php echo Yii::t('menu', 'Friends, who are also following') ?> <?php echo Html::encode($user->username); ?>:</h5>
                                 <div class="row">
                                     <?php foreach ($muturalSubscriptions as $item): ?>
                                         <div class="col-md-12">
@@ -65,14 +65,18 @@ $this->title = Html::encode($user->username);
                         <?php endif; ?>
 
                         <div class="profile-bottom">
+                            <br>
                             <div class="profile-post-count">
-                                <span><?php echo $user->getPostCount(); ?> posts</span>
+                                <span><?php echo Yii::t('menu', 'posts ') . '(' . $user->getPostCount() . ')';?></span>
                             </div>
                             <div class="profile-followers">
-                                <a href="#" data-toggle="modal" data-target="#followers"> <?php echo $user->countFollowers(); ?> followers</a>
+                                <a href="#" data-toggle="modal"
+                                   data-target="#followers"> <?php echo Yii::t('menu', 'followers ') . '(' . $user->countFollowers() . ')';?></a>
                             </div>
                             <div class="profile-following">
-                                <a href="#" data-toggle="modal" data-target="#subscriptions"> <?php echo $user->countSubscriptions(); ?> following</a>
+                                <a href="#" data-toggle="modal"
+                                   data-target="#subscriptions">
+                                    <?php echo Yii::t('menu', 'following ') . '(' . $user->countSubscriptions(). ')';?></a>
                             </div>
                         </div>
                     </article>

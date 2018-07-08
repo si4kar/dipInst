@@ -81,7 +81,7 @@ use yii\helpers\Url;
     <div class="col-md-12">
         <?php if ($currentUser): ?>
             <?php $form = ActiveForm::begin(); ?>
-            <?php echo $form->field($comment, 'description')->textarea()->label('New comment'); ?>
+            <?php echo $form->field($comment, 'description')->textarea(['value' => ''])->label('New comment'); ?>
             <?php echo $form->field($comment, 'post_id')->hiddenInput(['value' => $post->id])->label(false); ?>
             <?php echo Html::submitButton('Create', ['class' => 'btn btn-primary']); ?>
             <?php ActiveForm::end(); ?>

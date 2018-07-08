@@ -15,6 +15,7 @@ use yii\web\Response;
  */
 class SiteController extends Controller
 {
+    const TYPE_ORDINARY_USER = null;
 
     /**
      * {@inheritdoc}
@@ -54,14 +55,16 @@ class SiteController extends Controller
 
     public function actionUsers()
     {
-        $usersList = User::find()->all();
+        $usersList = User::find()->where(['type' => self::TYPE_ORDINARY_USER]);
 
         /* @var $currentUser User */
         $currentUser = Yii::$app->user->identity;
+        $pages = new Pagination(['totalCount' => $usersList->count(), 'pageSize' => 5]);
 
         return $this->render('users', [
-            'usersList' => $usersList,
+            'usersList' => $usersList->all(),
             'currentUser' => $currentUser,
+            'pages' => $pages,
         ]);
     }
 

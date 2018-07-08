@@ -52,23 +52,20 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionSearch($term)
+    public function actionUsers()
     {
+        $usersList = User::find()->all();
+
+        /* @var $currentUser User */
         $currentUser = Yii::$app->user->identity;
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $rs = Feed::find()->andWhere(['like', 'post_description', 'da'])->andWhere(['user_id' => $currentUser->getId()])->all();
 
-        if ($rs != null) {
-            $row_set = [];
-            foreach ($rs as $row) {
-                $row_set[] = $row->post_description; //build an array
-            }
-            return $row_set;
-        }
-
-        return false;
-
+        return $this->render('users', [
+            'usersList' => $usersList,
+            'currentUser' => $currentUser,
+        ]);
     }
+
+
 
     public function actionLanguage()
     {

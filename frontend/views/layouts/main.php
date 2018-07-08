@@ -48,21 +48,6 @@ FontAwesomeAsset::register($this);
                 </div>
                 <div class="col-md-4 col-sm-4 navicons-topbar">
                     <ul>
-                        <li class="blog-search">
-                            <i class="fa fa-search"></i>
-
-                                <?php echo AutoComplete::widget([
-                                    /*          'model' => $model,
-                                              'attribute' => 'country',*/
-                                    'options' => (['class' => 'form-control', 'placeholder' => 'Search for description']),
-                                    'clientOptions' => [
-                                        'source' => Url::to(['site/search']),
-                                        'minLength'=>'2',
-
-                                    ],
-                                ]); ?>
-                        </li>
-
                         <li>
                             <br>
                             <p>Language:</p>
@@ -84,6 +69,7 @@ FontAwesomeAsset::register($this);
                         <?php
                         $menuItems = [
                             ['label' => Yii::t('menu', 'NewsFeed'), 'url' => ['/site/index']],
+                            ['label' => Yii::t('menu', 'Users list'), 'url' => ['/site/users']],
                         ];
                         if (Yii::$app->user->isGuest) {
                             $menuItems[] = ['label' => Yii::t('menu','Signup'), 'url' => ['/user/default/signup']];

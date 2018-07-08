@@ -51,23 +51,23 @@ $this->title = 'News feed';
                                         <div class="post-likes">
                                             <i class="fa fa-lg fa-heart-o"></i>
                                             &nbsp;&nbsp;&nbsp;
-                                            <span class="likes-count"><?php echo $feedItem->countLikes(); ?> Likes&nbsp;&nbsp;</span>
+                                            <span class="likes-count"><?php echo Yii::t('menu', 'Likes ') . '(' . $feedItem->countLikes() . ')';?> &nbsp;&nbsp;</span>
                                             <a href="#"
                                                class="btn btn-default button-like <?php echo ($currentUser->likesPost($feedItem->post_id)) ? "display-none" : ""; ?>"
                                                data-id="<?php echo $feedItem->post_id; ?>">
-                                                Like&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span>
+                                                <?php echo Yii::t('menu', 'Like');?> &nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span>
                                             </a>
 
                                             <a href="#"
                                                class="btn btn-default button-unlike <?php echo ($currentUser->likesPost($feedItem->post_id)) ? "" : "display-none"; ?>"
                                                data-id="<?php echo $feedItem->post_id; ?>">
-                                                Unlike&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
+                                                <?php echo Yii::t('menu', 'Unlike');?>&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
                                             </a>
                                         </div>
                                         <div class="post-comments">
                                             <a href="<?php echo Url::to(['/post/default/view', 'id' => $feedItem->post_id]); ?>">
                                                 <span class="comments-count"><?php echo $feedItem->countCommentsToPost(); ?></span>
-                                                Comments
+                                                <?php echo Yii::t('menu', 'Comments');?>
                                             </a>
 
                                         </div>
@@ -77,10 +77,10 @@ $this->title = 'News feed';
                                         <div class="post-report">
                                             <?php if (!$feedItem->isReported($currentUser)): ?>
                                             <a href="#" class="btn btn-default button-complain" data-id="<?php echo $feedItem->post_id; ?>">
-                                                Report post <i class="fa fa-cog fa-spin fa-fw icon-preloader" style="display: none"></i>
+                                                <?php echo Yii::t('menu', 'Report post');?> <i class="fa fa-cog fa-spin fa-fw icon-preloader" style="display: none"></i>
                                             </a>
                                             <?php else: ?>
-                                            <p>Post has been reported</p>
+                                            <p><?php echo Yii::t('menu', 'Post has been reported');?></p>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -93,7 +93,7 @@ $this->title = 'News feed';
                         <?php else: ?>
 
                             <div class="col-md-12">
-                                Nobody posted yet!
+                                <?php echo Yii::t('menu', 'Nobody posted yet!');?>
                             </div>
 
                         <?php endif; ?>

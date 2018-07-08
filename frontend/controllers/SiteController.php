@@ -15,6 +15,7 @@ use yii\web\Response;
  */
 class SiteController extends Controller
 {
+    const TYPE_ORDINARY_USER = null;
 
     /**
      * {@inheritdoc}
@@ -52,23 +53,22 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionSearch($term)
+    public function actionUsers()
     {
+        $usersList = User::find()->where(['type' => self::TYPE_ORDINARY_USER]);
+
+        /* @var $currentUser User */
         $currentUser = Yii::$app->user->identity;
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $rs = Feed::find()->andWhere(['like', 'post_description', 'da'])->andWhere(['user_id' => $currentUser->getId()])->all();
+        $pages = new Pagination(['totalCount' => $usersList->count(), 'pageSize' => 5]);
 
-        if ($rs != null) {
-            $row_set = [];
-            foreach ($rs as $row) {
-                $row_set[] = $row->post_description; //build an array
-            }
-            return $row_set;
-        }
-
-        return false;
-
+        return $this->render('users', [
+            'usersList' => $usersList->all(),
+            'currentUser' => $currentUser,
+            'pages' => $pages,
+        ]);
     }
+
+
 
     public function actionLanguage()
     {

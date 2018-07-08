@@ -2,6 +2,8 @@
 
 namespace frontend\modules\post\controllers;
 
+use frontend\models\Comments;
+use frontend\models\Feed;
 use frontend\models\Post;
 use frontend\models\User;
 use frontend\modules\post\models\forms\CommentForm;
@@ -43,6 +45,43 @@ class DefaultController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Delete post from mysql and redis
+     * @param $id
+     * @return bool|Response
+     */
+    public function actionDelete_post($id)
+    {
+        $post = Post::findOne($id);
+
+        $currentUser = Yii::$app->user->identity;
+        $user = User::findOne(['id' => $post->user_id]);
+
+        /* @var $redis \yii\redis\Connection */
+        $redis = Yii::$app->redis;
+
+        if ($user->id === $currentUser->getId() && $post->delete()) {
+            if (Comments::findOne(['post_id' => $id])) {
+                Comments::deleteAll(['post_id' => $id]);
+                $redis->del("post:{$post->id}:comments");
+            }
+
+            if (Feed::findOne(['post_id' => $id])) {
+                Feed::deleteAll(['post_id' => $id]);
+            }
+
+            $redis->del("post:{$post->id}:complaints");
+            $redis->del("post:{$post->id}:likes");
+
+            $path = $post->filename;
+            Yii::$app->storage->deleteFile($path);
+
+            return $this->redirect(['/user/profile/view', 'nickname' => $user->id]);
+        }
+
+        return false;
     }
 
     /**
@@ -97,10 +136,8 @@ class DefaultController extends Controller
 
     /**
      * @param $id
-     * @return Response
-     * @throws NotFoundHttpException
      */
-    public function actionDelete($id)
+    public function actionDelete_comment($id)
     {
         $comment = new CommentForm();
         if ($post_id = $comment->deleteFromRedis($id)) {

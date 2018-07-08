@@ -5,13 +5,10 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\assets\FontAwesomeAsset;
 use common\widgets\Alert;
 use yii\helpers\Url;
-use yii\jui\AutoComplete;
 
 AppAsset::register($this);
 FontAwesomeAsset::register($this);
@@ -48,27 +45,12 @@ FontAwesomeAsset::register($this);
                 </div>
                 <div class="col-md-4 col-sm-4 navicons-topbar">
                     <ul>
-                        <li class="blog-search">
-                            <i class="fa fa-search"></i>
-
-                                <?php echo AutoComplete::widget([
-                                    /*          'model' => $model,
-                                              'attribute' => 'country',*/
-                                    'options' => (['class' => 'form-control', 'placeholder' => 'Search for description']),
-                                    'clientOptions' => [
-                                        'source' => Url::to(['site/search']),
-                                        'minLength'=>'2',
-
-                                    ],
-                                ]); ?>
-                        </li>
-
                         <li>
                             <br>
                             <p>Language:</p>
                             <?= Html::beginForm(['/site/language']) ?>
-                            <?= Html::dropDownList('language', Yii::$app->language, ['en-US' => 'English', 'ru-RU' => 'Русский']) ?>
-                            <?= Html::submitButton('Change') ?>
+                            <?= Html::dropDownList('language', Yii::$app->language, ['en-US' => 'English', 'ru-RU' => 'Русский'], ['class' => 'btn btn-default dropdown-toggle']) ?>
+                            <?= Html::submitButton('Change', ['class' => 'btn btn-default']) ?>
                             <?= Html::endForm(); ?>
                         </li>
                     </ul>
@@ -84,6 +66,7 @@ FontAwesomeAsset::register($this);
                         <?php
                         $menuItems = [
                             ['label' => Yii::t('menu', 'NewsFeed'), 'url' => ['/site/index']],
+                            ['label' => Yii::t('menu', 'Users list'), 'url' => ['/site/users']],
                         ];
                         if (Yii::$app->user->isGuest) {
                             $menuItems[] = ['label' => Yii::t('menu','Signup'), 'url' => ['/user/default/signup']];

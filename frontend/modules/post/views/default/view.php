@@ -44,6 +44,10 @@ use yii\helpers\Url;
         </a>
         <?php endif; ?>
 
+        <?php if ($currentUser && $currentUser->id == $post->user_id): ?>
+        <br>
+        <a href="<?php echo Url::to(['/post/default/delete_post', 'id' => $post->id]); ?>" class="btn btn-primary">Delete post</a>
+        <?php endif; ?>
     </div>
 
     <hr>
@@ -62,9 +66,11 @@ use yii\helpers\Url;
 
             <?php if ($currentUser && $currentUser->id == $current_comment->user_id): ?>
                 <a href="<?php echo Url::to(['/post/default/update', 'id' => $current_comment->id]); ?>"
-                   class="btn btn-default">Edit</a>
-                <a href="<?php echo Url::to(['/post/default/delete', 'id' => $current_comment->id]); ?>"
-                   class="btn btn-default">Delete</a>
+                   class="btn btn-default">Edit
+                </a>
+                <a href="<?php echo Url::to(['/post/default/delete_comment', 'id' => $current_comment->id]); ?>"
+                   class="btn btn-default">Delete
+                </a>
             <?php endif; ?>
         <?php endforeach; ?>
     </div>

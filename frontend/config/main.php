@@ -56,6 +56,7 @@ return [
             'showScriptName' => false,
             'rules' => [
                 '/' => 'site/index',
+                'profile/edit/<nickname:\w+>' => 'user/profile/edit_profile',
                 'profile/<nickname:\w+>' => 'user/profile/view',
                 'post/update/<id:\d+>' => 'post/default/update',
                 'post/delete_comment/<id:\d+>' => 'post/default/delete_comment',

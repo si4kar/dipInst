@@ -24,43 +24,10 @@ $this->title = Html::encode($user->username);
                             <img src="<?php echo $user->getPicture(); ?>" class="author-image" id="profile-picture"/>
                             <div class="author-name"><?php echo Html::encode($user->username); ?></div>
                             <?php if ($currentUser && $currentUser->equals($user)): ?>
-
-                            <!--widget to upload avatar photo-->
-                            <?= FileUpload::widget([
-                                'model' => $modelPicture,
-                                'attribute' => 'picture',
-                                'url' => ['/user/profile/upload-picture'], // your url, this is just for demo purposes,
-                                'options' => ['accept' => 'image/*'],
-                                'clientEvents' => [
-                                    'fileuploaddone' => 'function(e, data) {
-                                     if (data.result.success) {
-                                            $("#profile-image-success").show();
-                                            $("#profile-image-fail").hide();
-                                            $("#profile-picture").attr("src", data.result.pictureUri);
-                                        } else {
-                                            $("#profile-image-fail").html(data.result.errors.picture).show();
-                                            $("#profile-image-success").hide();
-                                        }
-                                    }',
-                                ],
-                            ]); ?>
-
-
-
-                            <a href="#" class="btn btn-default">Edit profile</a>
-
+                                <a href="<?php echo Url::to(['/user/profile/edit_profile', 'nickname' => $currentUser->getNickname()])?>" class="btn btn-default">Edit profile</a>
                             <?php endif; ?>
-
-
-
-                            <br>
-                            <div class="alert alert-success" style="display: none" id="profile-image-success">
-                                Profile image updated
-                            </div>
-                            <div class="alert alert-danger" style="display: none" id="profile-image-fail"></div>
-
-
                         </div>
+
                         <?php if ($user->about): ?>
                         <div class="profile-description">
                             <p><?php echo HTMLPurifier::process($user->about); ?></p>
@@ -70,6 +37,7 @@ $this->title = Html::encode($user->username);
 
                         <!--If show another user profile add button subscribe and unsubscribe-->
                         <?php if ($currentUser && !$user->equals($currentUser)): ?>
+                            <br>
                             <?php if (!$currentUser->isFollowing($user)): ?>
                                 <a href="<?php echo Url::to(['/user/profile/subscribe', 'id' => $user->getId()]); ?>" class="btn btn-info">Subscribe</a>
                             <?php else: ?>
@@ -93,8 +61,9 @@ $this->title = Html::encode($user->username);
                                 </div>
 
                             <?php endif; ?>
+                            <hr>
                         <?php endif; ?>
-                        <hr>
+
                         <div class="profile-bottom">
                             <div class="profile-post-count">
                                 <span><?php echo $user->getPostCount(); ?> posts</span>

@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use frontend\modules\user\models\forms\PictureForm;
 use yii\web\Response;
 use yii\web\UploadedFile;
+use frontend\modules\user\models\forms\UserForm;
 
 /**
  * Default controller for the `user` module
@@ -35,6 +36,35 @@ class ProfileController extends Controller
             'currentUser' => $currentUser,
             'modelPicture' => $modelPicture,
             'postItems' => $postItems,
+        ]);
+    }
+
+    public function actionEdit_profile($nickname)
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect('/user/default/login ');
+        }
+
+        /* @var $currentUser User */
+        $currentUser = Yii::$app->user->identity;
+
+        $model = new UserForm($currentUser);
+        if ($model->load(Yii::$app->request->post())) {
+          /*  $model->picture = UploadedFile::getInstance($model, 'picture');*/
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'user info update');
+
+                return $this->redirect(['/user/profile/view', 'nickname' => $currentUser->getNickname()]);
+            }
+        }
+        $modelPicture = new PictureForm();
+
+        return $this->render( 'edit', [
+           'user' => $this->findUser($nickname),
+           'currentUser' => $currentUser,
+            'modelPicture' => $modelPicture,
+            'model' => $model,
         ]);
     }
 

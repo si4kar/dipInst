@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\StringHelper;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -35,7 +36,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::img($post->getImage(), ['width' => '130px']);
                 }
             ],
-            'description:ntext',
+            [
+                'attribute' => 'description',
+                'format' => 'ntext',
+                'value' => function ($post) {
+                    return StringHelper::truncate($post->description, 100);
+                }
+            ],
             'created_at:datetime',
             'complaints',
 

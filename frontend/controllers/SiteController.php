@@ -62,7 +62,7 @@ class SiteController extends Controller
         $pages = new Pagination(['totalCount' => $usersList->count(), 'pageSize' => 5]);
 
         return $this->render('users', [
-            'usersList' => $usersList->all(),
+            'usersList' => $usersList->offset($pages->offset)->limit($pages->limit)->all(),
             'currentUser' => $currentUser,
             'pages' => $pages,
         ]);
